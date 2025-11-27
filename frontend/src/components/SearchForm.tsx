@@ -1,175 +1,153 @@
-import React, { useState } from 'react';
-import { Search, Calendar, Users, MapPin } from 'lucide-react';
-import { useLanguage } from '../contexts/LanguageContext';
+'use client'
 
-interface SearchFormProps {
-  type: 'flight' | 'hotel';
-  onSearch: (data: any) => void;
-}
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { Plane, Calendar, Users, Search } from 'lucide-react'
 
-const SearchForm: React.FC<SearchFormProps> = ({ type, onSearch }) => {
-  const { language } = useLanguage();
+export default function SearchForm() {
+  const router = useRouter()
   const [formData, setFormData] = useState({
     from: '',
     to: '',
-    departDate: '',
-    returnDate: '',
-    passengers: 1,
-    checkIn: '',
-    checkOut: '',
-    guests: 1,
-  });
+    departure: '',
+    return: '',
+    passengers: '1',
+  })
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSearch(formData);
-  };
+    e.preventDefault()
+
+    // Build query string
+    const params = new URLSearchParams({
+      from: formData.from,
+      to: formData.to,
+      departure: formData.departure,
+      return: formData.return,
+      passengers: formData.passengers,
+    })
+
+    // Navigate to search results
+    router.push(`/search?${params.toString()}`)
+  }
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    })
+  }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-lg p-6 space-y-4">
-      {type === 'flight' ? (
-        <>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                <MapPin className="inline h-4 w-4 mr-1" />
-                From
-              </label>
-              <input
-                type="text"
-                value={formData.from}
-                onChange={(e) => setFormData({ ...formData, from: e.target.value })}
-                placeholder="City or Airport"
-                className="input-field"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                <MapPin className="inline h-4 w-4 mr-1" />
-                To
-              </label>
-              <input
-                type="text"
-                value={formData.to}
-                onChange={(e) => setFormData({ ...formData, to: e.target.value })}
-                placeholder="City or Airport"
-                className="input-field"
-                required
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                <Calendar className="inline h-4 w-4 mr-1" />
-                Departure
-              </label>
-              <input
-                type="date"
-                value={formData.departDate}
-                onChange={(e) => setFormData({ ...formData, departDate: e.target.value })}
-                className="input-field"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                <Calendar className="inline h-4 w-4 mr-1" />
-                Return
-              </label>
-              <input
-                type="date"
-                value={formData.returnDate}
-                onChange={(e) => setFormData({ ...formData, returnDate: e.target.value })}
-                className="input-field"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                <Users className="inline h-4 w-4 mr-1" />
-                Passengers
-              </label>
-              <input
-                type="number"
-                min="1"
-                max="9"
-                value={formData.passengers}
-                onChange={(e) => setFormData({ ...formData, passengers: parseInt(e.target.value) })}
-                className="input-field"
-              />
-            </div>
-          </div>
-        </>
-      ) : (
-        <>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              <MapPin className="inline h-4 w-4 mr-1" />
-              Destination
-            </label>
+    <form onSubmit={handleSubmit} className="card">
+      <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-4">
+        {/* From */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            From
+          </label>
+          <div className="relative">
+            <Plane className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
             <input
               type="text"
-              value={formData.to}
-              onChange={(e) => setFormData({ ...formData, to: e.target.value })}
-              placeholder="City or Hotel Name"
-              className="input-field"
+              name="from"
+              value={formData.from}
+              onChange={handleChange}
+              placeholder="City or Airport"
+              className="input-field pl-10"
               required
             />
           </div>
+        </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                <Calendar className="inline h-4 w-4 mr-1" />
-                Check-in
-              </label>
-              <input
-                type="date"
-                value={formData.checkIn}
-                onChange={(e) => setFormData({ ...formData, checkIn: e.target.value })}
-                className="input-field"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                <Calendar className="inline h-4 w-4 mr-1" />
-                Check-out
-              </label>
-              <input
-                type="date"
-                value={formData.checkOut}
-                onChange={(e) => setFormData({ ...formData, checkOut: e.target.value })}
-                className="input-field"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                <Users className="inline h-4 w-4 mr-1" />
-                Guests
-              </label>
-              <input
-                type="number"
-                min="1"
-                max="10"
-                value={formData.guests}
-                onChange={(e) => setFormData({ ...formData, guests: parseInt(e.target.value) })}
-                className="input-field"
-              />
-            </div>
+        {/* To */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            To
+          </label>
+          <div className="relative">
+            <Plane className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 rotate-90" />
+            <input
+              type="text"
+              name="to"
+              value={formData.to}
+              onChange={handleChange}
+              placeholder="City or Airport"
+              className="input-field pl-10"
+              required
+            />
           </div>
-        </>
-      )}
+        </div>
 
-      <button type="submit" className="btn-primary w-full">
-        <Search className="inline h-5 w-5 mr-2" />
-        Search {type === 'flight' ? 'Flights' : 'Hotels'}
-      </button>
+        {/* Departure */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Departure
+          </label>
+          <div className="relative">
+            <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <input
+              type="date"
+              name="departure"
+              value={formData.departure}
+              onChange={handleChange}
+              className="input-field pl-10"
+              required
+            />
+          </div>
+        </div>
+
+        {/* Return */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Return
+          </label>
+          <div className="relative">
+            <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <input
+              type="date"
+              name="return"
+              value={formData.return}
+              onChange={handleChange}
+              className="input-field pl-10"
+            />
+          </div>
+        </div>
+
+        {/* Passengers */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Passengers
+          </label>
+          <div className="relative">
+            <Users className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <select
+              name="passengers"
+              value={formData.passengers}
+              onChange={handleChange}
+              className="input-field pl-10"
+            >
+              {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
+                <option key={num} value={num}>
+                  {num} {num === 1 ? 'Passenger' : 'Passengers'}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+      </div>
+
+      {/* Submit Button */}
+      <div className="mt-6">
+        <button type="submit" className="btn-primary w-full flex items-center justify-center gap-2">
+          <Search className="w-5 h-5" />
+          Search Flights
+        </button>
+      </div>
+
+      {/* Info Text */}
+      <p className="text-sm text-gray-500 text-center mt-4">
+        We'll search in 15 languages to find you the best deals
+      </p>
     </form>
-  );
-};
-
-export default SearchForm;
+  )
+}

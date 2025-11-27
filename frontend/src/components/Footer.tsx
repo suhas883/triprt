@@ -1,64 +1,110 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Plane } from 'lucide-react';
+import Link from 'next/link'
+import { Plane, Twitter, Linkedin, Github } from 'lucide-react'
 
-const Footer: React.FC = () => {
+export default function Footer() {
   return (
     <footer className="bg-gray-900 text-gray-300">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div className="container mx-auto px-4 py-12">
+        <div className="grid md:grid-cols-4 gap-8">
           {/* Brand */}
           <div>
-            <div className="flex items-center space-x-2 mb-4">
-              <Plane className="h-8 w-8 text-primary-500" />
-              <span className="text-2xl font-bold text-white">TripRT</span>
-            </div>
+            <Link href="/" className="flex items-center gap-2 text-2xl font-bold text-white mb-4">
+              <Plane className="w-8 h-8" />
+              <span>TripRT</span>
+            </Link>
             <p className="text-sm">
-              World's first AI-powered travel search. Find flights and hotels 30% cheaper than anywhere else.
+              AI-powered travel search finding you the best deals in 15 languages.
             </p>
           </div>
 
-          {/* Quick Links */}
+          {/* Product */}
           <div>
-            <h3 className="text-white font-semibold mb-4">Quick Links</h3>
+            <h3 className="font-bold text-white mb-4">Product</h3>
             <ul className="space-y-2 text-sm">
-              <li><Link to="/flights" className="hover:text-white">Search Flights</Link></li>
-              <li><Link to="/hotels" className="hover:text-white">Search Hotels</Link></li>
-              <li><Link to="/alerts" className="hover:text-white">Price Alerts</Link></li>
-              <li><Link to="/blog" className="hover:text-white">Travel Blog</Link></li>
+              <li>
+                <Link href="/flights" className="hover:text-white transition-colors">
+                  Search Flights
+                </Link>
+              </li>
+              <li>
+                <Link href="/hotels" className="hover:text-white transition-colors">
+                  Search Hotels
+                </Link>
+              </li>
+              <li>
+                <Link href="/search" className="hover:text-white transition-colors">
+                  Advanced Search
+                </Link>
+              </li>
             </ul>
           </div>
 
-          {/* Resources */}
+          {/* Company */}
           <div>
-            <h3 className="text-white font-semibold mb-4">Resources</h3>
+            <h3 className="font-bold text-white mb-4">Company</h3>
             <ul className="space-y-2 text-sm">
-              <li><Link to="/blog/how-to-find-cheapest-flights-2025" className="hover:text-white">Find Cheap Flights</Link></li>
-              <li><Link to="/blog/best-time-to-book-flights-2025" className="hover:text-white">Best Time to Book</Link></li>
-              <li><Link to="/blog/hidden-city-ticketing-guide" className="hover:text-white">Hidden City Tickets</Link></li>
-              <li><Link to="/blog/travel-hacking-guide-2025" className="hover:text-white">Travel Hacking</Link></li>
+              <li>
+                <Link href="/about" className="hover:text-white transition-colors">
+                  About Us
+                </Link>
+              </li>
+              <li>
+                <Link href="/contact" className="hover:text-white transition-colors">
+                  Contact
+                </Link>
+              </li>
+              <li>
+                <Link href="/privacy" className="hover:text-white transition-colors">
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link href="/terms" className="hover:text-white transition-colors">
+                  Terms of Service
+                </Link>
+              </li>
             </ul>
           </div>
 
-          {/* Legal */}
+          {/* Social */}
           <div>
-            <h3 className="text-white font-semibold mb-4">Legal</h3>
-            <ul className="space-y-2 text-sm">
-              <li><a href="#" className="hover:text-white">Privacy Policy</a></li>
-              <li><a href="#" className="hover:text-white">Terms of Service</a></li>
-              <li><a href="#" className="hover:text-white">Cookie Policy</a></li>
-              <li><a href="#" className="hover:text-white">Contact Us</a></li>
-            </ul>
+            <h3 className="font-bold text-white mb-4">Connect</h3>
+            <div className="flex gap-4">
+              <a
+                href="https://twitter.com/triprt"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-white transition-colors"
+              >
+                <Twitter className="w-6 h-6" />
+              </a>
+              <a
+                href="https://linkedin.com/company/triprt"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-white transition-colors"
+              >
+                <Linkedin className="w-6 h-6" />
+              </a>
+              <a
+                href="https://github.com/suhas883/triprt"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-white transition-colors"
+              >
+                <Github className="w-6 h-6" />
+              </a>
+            </div>
           </div>
         </div>
 
         <div className="border-t border-gray-800 mt-8 pt-8 text-sm text-center">
-          <p>&copy; {new Date().getFullYear()} TripRT.com - All rights reserved.</p>
-          <p className="mt-2">Built with AI. Powered by innovation. Made for travelers.</p>
+          <p>&copy; {new Date().getFullYear()} TripRT. All rights reserved.</p>
+          <p className="mt-2 text-gray-500">
+            Built with ❤️ to help travelers save money
+          </p>
         </div>
       </div>
     </footer>
-  );
-};
-
-export default Footer;
+  )
+}

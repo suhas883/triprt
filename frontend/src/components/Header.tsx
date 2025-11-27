@@ -1,126 +1,85 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Plane, Menu, X, Globe, DollarSign } from 'lucide-react';
-import { useLanguage, SUPPORTED_LANGUAGES } from '../contexts/LanguageContext';
-import { useCurrency, SUPPORTED_CURRENCIES } from '../contexts/CurrencyContext';
+'use client'
 
-const Header: React.FC = () => {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [langMenuOpen, setLangMenuOpen] = useState(false);
-  const [currMenuOpen, setCurrMenuOpen] = useState(false);
-  const { language, setLanguage } = useLanguage();
-  const { currency, setCurrency } = useCurrency();
+import Link from 'next/link'
+import { Plane, Menu, X } from 'lucide-react'
+import { useState } from 'react'
+
+export default function Header() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
-      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+      <nav className="container mx-auto px-4 py-4">
+        <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
-            <Plane className="h-8 w-8 text-primary-600" />
-            <span className="text-2xl font-bold text-primary-600">TripRT</span>
+          <Link href="/" className="flex items-center gap-2 text-2xl font-bold text-primary-600">
+            <Plane className="w-8 h-8" />
+            <span>TripRT</span>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            <Link to="/flights" className="text-gray-700 hover:text-primary-600 font-medium">
+          <div className="hidden md:flex items-center gap-8">
+            <Link href="/flights" className="text-gray-700 hover:text-primary-600 font-medium transition-colors">
               Flights
             </Link>
-            <Link to="/hotels" className="text-gray-700 hover:text-primary-600 font-medium">
+            <Link href="/hotels" className="text-gray-700 hover:text-primary-600 font-medium transition-colors">
               Hotels
             </Link>
-            <Link to="/blog" className="text-gray-700 hover:text-primary-600 font-medium">
-              Travel Tips
+            <Link href="/search" className="text-gray-700 hover:text-primary-600 font-medium transition-colors">
+              Search
             </Link>
-            <Link to="/alerts" className="text-gray-700 hover:text-primary-600 font-medium">
-              Price Alerts
+            <Link href="/flights" className="btn-primary">
+              Start Searching
             </Link>
-
-            {/* Language Selector */}
-            <div className="relative">
-              <button
-                onClick={() => setLangMenuOpen(!langMenuOpen)}
-                className="flex items-center space-x-1 text-gray-700 hover:text-primary-600"
-              >
-                <Globe className="h-5 w-5" />
-                <span>{SUPPORTED_LANGUAGES[language as keyof typeof SUPPORTED_LANGUAGES]?.flag}</span>
-              </button>
-              {langMenuOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 max-h-96 overflow-y-auto">
-                  {Object.entries(SUPPORTED_LANGUAGES).map(([code, { name, flag }]) => (
-                    <button
-                      key={code}
-                      onClick={() => {
-                        setLanguage(code);
-                        setLangMenuOpen(false);
-                      }}
-                      className="w-full text-left px-4 py-2 hover:bg-gray-100 flex items-center space-x-2"
-                    >
-                      <span>{flag}</span>
-                      <span>{name}</span>
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* Currency Selector */}
-            <div className="relative">
-              <button
-                onClick={() => setCurrMenuOpen(!currMenuOpen)}
-                className="flex items-center space-x-1 text-gray-700 hover:text-primary-600"
-              >
-                <DollarSign className="h-5 w-5" />
-                <span>{currency}</span>
-              </button>
-              {currMenuOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 max-h-96 overflow-y-auto">
-                  {Object.entries(SUPPORTED_CURRENCIES).map(([code, { symbol, name }]) => (
-                    <button
-                      key={code}
-                      onClick={() => {
-                        setCurrency(code);
-                        setCurrMenuOpen(false);
-                      }}
-                      className="w-full text-left px-4 py-2 hover:bg-gray-100"
-                    >
-                      {symbol} {code} - {name}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
           </div>
 
-          {/* Mobile menu button */}
+          {/* Mobile Menu Button */}
           <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="md:hidden"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
-            {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            {mobileMenuOpen ? (
+              <X className="w-6 h-6" />
+            ) : (
+              <Menu className="w-6 h-6" />
+            )}
           </button>
         </div>
 
         {/* Mobile Navigation */}
         {mobileMenuOpen && (
-          <div className="md:hidden py-4 space-y-4">
-            <Link to="/flights" className="block text-gray-700 hover:text-primary-600">
+          <div className="md:hidden mt-4 pb-4 space-y-4">
+            <Link
+              href="/flights"
+              className="block text-gray-700 hover:text-primary-600 font-medium"
+              onClick={() => setMobileMenuOpen(false)}
+            >
               Flights
             </Link>
-            <Link to="/hotels" className="block text-gray-700 hover:text-primary-600">
+            <Link
+              href="/hotels"
+              className="block text-gray-700 hover:text-primary-600 font-medium"
+              onClick={() => setMobileMenuOpen(false)}
+            >
               Hotels
             </Link>
-            <Link to="/blog" className="block text-gray-700 hover:text-primary-600">
-              Travel Tips
+            <Link
+              href="/search"
+              className="block text-gray-700 hover:text-primary-600 font-medium"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Search
             </Link>
-            <Link to="/alerts" className="block text-gray-700 hover:text-primary-600">
-              Price Alerts
+            <Link
+              href="/flights"
+              className="block btn-primary text-center"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Start Searching
             </Link>
           </div>
         )}
       </nav>
     </header>
-  );
-};
-
-export default Header;
+  )
+}
