@@ -1,146 +1,120 @@
-'use client'
+"use client";
 
-import { useSearchParams } from 'next/navigation'
-import { Plane, Clock, DollarSign, TrendingUp, Loader2 } from 'lucide-react'
-import { Suspense } from 'react'
+import { useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { searchFlights, FlightResult } from '@/lib/api';
+import AdBanner from '@/components/AdBanner';
 
-function SearchResults() {
-  const searchParams = useSearchParams()
-  const from = searchParams.get('from')
-  const to = searchParams.get('to')
-  const departure = searchParams.get('departure')
-  const returnDate = searchParams.get('return')
-  const passengers = searchParams.get('passengers')
+export default function SearchPage() {
+  const searchParams = useSearchParams();
+  const [results, setResults] = useState<FlightResult[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  // Mock search results (in production, this would call your API)
-  const results = [
-    {
-      id: 1,
-      airline: 'ANA (All Nippon Airways)',
-      price: 450,
-      duration: '13h 30m',
-      stops: 'Direct',
-      departure: '10:30 AM',
-      arrival: '2:00 PM (+1)',
-      source: 'Rakuten Travel (Japanese)',
-      savings: 120,
-    },
-    {
-      id: 2,
-      airline: 'Korean Air',
-      price: 485,
-      duration: '14h 15m',
-      stops: '1 stop',
-      departure: '8:45 AM',
-      arrival: '11:00 PM',
-      source: 'Naver Travel (Korean)',
-      savings: 95,
-    },
-    {
-      id: 3,
-      airline: 'Japan Airlines',
-      price: 520,
-      duration: '13h 45m',
-      stops: 'Direct',
-      departure: '2:15 PM',
-      arrival: '5:45 PM (+1)',
-      source: 'Jalan (Japanese)',
-      savings: 80,
-    },
-  ]
+  useEffect(() => {
+    const fetchResults = async () => {
+      const params = {
+        from: searchParams.get('from') || '',
+        to: searchParams.get('to') || '',
+        departDate: searchParams.get('departDate') || '',
+        returnDate: searchParams.get('returnDate') || '',
+        passengers: parseInt(searchParams.get('passengers') || '1'),
+      };
+
+      const data = await searchFlights(params);
+      setResults(data);
+      setLoading(false);
+    };
+
+    fetchResults();
+  }, [searchParams]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-primary-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Searching across 50+ sites...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="bg-gray-50 min-h-screen">
-      <div className="container mx-auto px-4 py-8">
-        {/* Search Summary */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-          <h1 className="text-2xl font-bold mb-4">
-            {from} → {to}
-          </h1>
-          <div className="flex flex-wrap gap-4 text-sm text-gray-600">
-            <div>
-              <span className="font-medium">Departure:</span> {departure}
-            </div>
-            {returnDate && (
-              <div>
-                <span className="font-medium">Return:</span> {returnDate}
-              </div>
-            )}
-            <div>
-              <span className="font-medium">Passengers:</span> {passengers}
-            </div>
-          </div>
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <header className="bg-white shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <a href="/" className="text-2xl font-bold text-primary-600">TripRT</a>
+        </div>
+      </header>
 
-          <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg">
-            <p className="text-green-800 font-medium">
-              ✓ Searching in 15 languages across 50+ travel sites
-            </p>
-          </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Top Ad Banner */}
+        <div className="mb-6">
+          <AdBanner slot="search-top" />
         </div>
 
-        {/* Results */}
-        <div className="space-y-4">
-          <h2 className="text-xl font-bold mb-4">
-            {results.length} Flights Found
-          </h2>
+        <h1 className="text-3xl font-bold mb-6">
+          {searchParams.get('from')} → {searchParams.get('to')}
+        </h1>
 
-          {results.map((result) => (
-            <div key={result.id} className="bg-white rounded-lg shadow-md p-6">
-              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-3">
-                    <Plane className="w-6 h-6 text-primary-600" />
-                    <h3 className="text-lg font-bold">{result.airline}</h3>
-                    {result.savings > 0 && (
-                      <span className="bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded">
-                        Save ${result.savings}
+        <div className="grid lg:grid-cols-4 gap-6">
+          {/* Sidebar Ad */}
+          <div className="lg:col-span-1">
+            <div className="sticky top-4">
+              <AdBanner slot="search-sidebar" />
+            </div>
+          </div>
+
+          {/* Results */}
+          <div className="lg:col-span-3 space-y-4">
+            {results.map((flight) => (
+              <div key={flight.id} className="bg-white rounded-lg shadow p-6">
+                <div className="flex justify-between items-start">
+                  <div className="flex-1">
+                    <div className="flex items-center space-x-4 mb-2">
+                      <span className="font-semibold text-lg">{flight.airline}</span>
+                      <span className="text-sm text-gray-500">{flight.duration}</span>
+                      <span className="text-sm text-gray-500">
+                        {flight.stops === 0 ? 'Non-stop' : `${flight.stops} stop(s)`}
                       </span>
+                    </div>
+                    <div className="text-gray-600">
+                      {flight.departure} → {flight.arrival}
+                    </div>
+                    <div className="mt-2 text-sm text-gray-500">
+                      Source: {flight.source}
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-3xl font-bold text-primary-600">
+                      {flight.currency} {flight.price.toLocaleString()}
+                    </div>
+                    <a
+                      href={flight.bookingUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-4 inline-block bg-primary-600 text-white px-6 py-2 rounded-lg hover:bg-primary-700 transition"
+                    >
+                      Book Now
+                    </a>
+                    {!flight.isAffiliate && (
+                      <p className="text-xs text-gray-500 mt-2">
+                        External site
+                      </p>
                     )}
                   </div>
-
-                  <div className="grid grid-cols-3 gap-4 text-sm">
-                    <div>
-                      <p className="text-gray-500">Departure</p>
-                      <p className="font-semibold">{result.departure}</p>
-                    </div>
-                    <div>
-                      <p className="text-gray-500">Duration</p>
-                      <p className="font-semibold">{result.duration}</p>
-                    </div>
-                    <div>
-                      <p className="text-gray-500">Arrival</p>
-                      <p className="font-semibold">{result.arrival}</p>
-                    </div>
-                  </div>
-
-                  <div className="mt-3 text-xs text-gray-500">
-                    Found on: <span className="font-medium">{result.source}</span>
-                  </div>
-                </div>
-
-                <div className="text-center">
-                  <p className="text-3xl font-bold text-primary-600">
-                    ${result.price}
-                  </p>
-                  <button className="btn-primary mt-3">View Deal</button>
                 </div>
               </div>
+            ))}
+
+            {/* Bottom Ad Banner */}
+            <div className="mt-6">
+              <AdBanner slot="search-bottom" />
             </div>
-          ))}
+          </div>
         </div>
       </div>
     </div>
-  )
-}
-
-export default function SearchPage() {
-  return (
-    <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="w-12 h-12 animate-spin" />
-      </div>
-    }>
-      <SearchResults />
-    </Suspense>
-  )
+  );
 }

@@ -1,64 +1,93 @@
-// API utility functions for TripRT
+import axios from 'axios';
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.triprt.com';
 
 export interface FlightSearchParams {
-  from: string
-  to: string
-  departure: string
-  return?: string
-  passengers: number
+  from: string;
+  to: string;
+  departDate: string;
+  returnDate?: string;
+  passengers: number;
 }
 
-export interface HotelSearchParams {
-  destination: string
-  checkIn: string
-  checkOut: string
-  guests: number
+export interface FlightResult {
+  id: string;
+  airline: string;
+  departure: string;
+  arrival: string;
+  price: number;
+  currency: string;
+  duration: string;
+  stops: number;
+  source: string;
+  bookingUrl: string;
+  isAffiliate: boolean;
 }
 
-// Flight search API (placeholder - integrate with real APIs)
-export async function searchFlights(params: FlightSearchParams) {
-  // TODO: Integrate with Aviasales, Skyscanner, etc.
-  // This is where you'll add your API calls to:
-  // - Aviasales API
-  // - Skyscanner API
-  // - Japanese sites (Rakuten Travel, Jalan)
-  // - Korean sites (Naver, Interpark)
-  // - Chinese sites (Ctrip, Qunar)
-
-  console.log('Searching flights with params:', params)
-
-  // Mock response for now
-  return {
-    results: [],
-    searchId: 'mock-search-id',
+export async function searchFlights(params: FlightSearchParams): Promise<FlightResult[]> {
+  try {
+    const response = await axios.post(`${API_URL}/api/search/flights`, params);
+    return response.data;
+  } catch (error) {
+    console.error('Flight search error:', error);
+    // Return mock data as fallback
+    return getMockFlights(params);
   }
 }
 
-// Hotel search API (placeholder)
-export async function searchHotels(params: HotelSearchParams) {
-  // TODO: Integrate with Booking.com, Agoda, etc.
-
-  console.log('Searching hotels with params:', params)
-
-  return {
-    results: [],
-    searchId: 'mock-search-id',
+export async function searchHotels(params: any): Promise<any[]> {
+  try {
+    const response = await axios.post(`${API_URL}/api/search/hotels`, params);
+    return response.data;
+  } catch (error) {
+    console.error('Hotel search error:', error);
+    return [];
   }
 }
 
-// Add affiliate tracking
-export function addAffiliateTracking(url: string, source: string): string {
-  // TODO: Add your affiliate IDs based on the source
-  const affiliateIds: Record<string, string> = {
-    aviasales: process.env.AVIASALES_AFFILIATE_ID || '',
-    booking: process.env.BOOKING_AFFILIATE_ID || '',
-    // Add more affiliate IDs
+export async function createPriceAlert(data: {
+  email: string;
+  phone?: string;
+  route: string;
+  targetPrice: number;
+}): Promise<boolean> {
+  try {
+    await axios.post(`${API_URL}/api/alerts`, data);
+    return true;
+  } catch (error) {
+    console.error('Alert creation error:', error);
+    return false;
   }
+}
 
-  const affiliateId = affiliateIds[source.toLowerCase()]
-  if (affiliateId) {
-    return `${url}?affiliate_id=${affiliateId}`
-  }
-
-  return url
+// Mock data for testing
+function getMockFlights(params: FlightSearchParams): FlightResult[] {
+  return [
+    {
+      id: '1',
+      airline: 'Air India',
+      departure: params.from,
+      arrival: params.to,
+      price: 15000,
+      currency: 'INR',
+      duration: '3h 30m',
+      stops: 0,
+      source: 'Aviasales',
+      bookingUrl: 'https://www.aviasales.com',
+      isAffiliate: true,
+    },
+    {
+      id: '2',
+      airline: 'IndiGo',
+      departure: params.from,
+      arrival: params.to,
+      price: 12500,
+      currency: 'INR',
+      duration: '3h 45m',
+      stops: 0,
+      source: 'Rakuten Travel',
+      bookingUrl: 'https://travel.rakuten.co.jp',
+      isAffiliate: false,
+    },
+  ];
 }

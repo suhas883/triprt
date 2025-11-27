@@ -1,134 +1,115 @@
-import Link from 'next/link'
-import { Plane, Hotel, Globe, Zap, TrendingDown, Brain } from 'lucide-react'
-import SearchForm from '@/components/SearchForm'
+import SearchForm from '@/components/SearchForm';
+import AdBanner from '@/components/AdBanner';
 
 export default function Home() {
   return (
-    <div className="bg-gradient-to-b from-primary-50 to-white">
-      {/* Hero Section */}
-      <section className="container mx-auto px-4 py-16 md:py-24">
-        <div className="text-center max-w-4xl mx-auto mb-12">
-          <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-            World's First AI-Powered
-            <span className="text-primary-600"> Multi-Language</span> Travel Search
-          </h1>
-          <p className="text-xl md:text-2xl text-gray-600 mb-8">
-            Find Flights & Hotels 30% Cheaper Than Anywhere Else
-          </p>
-          <p className="text-lg text-gray-500">
-            We search in 15 languages across Japanese, Korean, Chinese & global travel sites
-          </p>
+    <main className="min-h-screen">
+      {/* Header */}
+      <header className="bg-white shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex justify-between items-center">
+            <h1 className="text-2xl font-bold text-primary-600">TripRT</h1>
+            <nav className="space-x-6">
+              <a href="/" className="text-gray-700 hover:text-primary-600">Home</a>
+              <a href="/flights" className="text-gray-700 hover:text-primary-600">Flights</a>
+              <a href="/hotels" className="text-gray-700 hover:text-primary-600">Hotels</a>
+              <a href="/alerts" className="text-gray-700 hover:text-primary-600">Price Alerts</a>
+            </nav>
+          </div>
         </div>
+      </header>
 
-        {/* Search Form */}
-        <div className="max-w-5xl mx-auto">
-          <SearchForm />
+      {/* Hero Section */}
+      <section className="bg-gradient-to-r from-primary-600 to-primary-800 text-white py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-5xl font-bold mb-4">
+            Find Flights 30% Cheaper
+          </h2>
+          <p className="text-xl mb-8">
+            AI-powered search across 50+ sites in 15 languages
+          </p>
+          <div className="bg-white rounded-lg shadow-xl p-8 max-w-4xl mx-auto">
+            <SearchForm />
+          </div>
         </div>
       </section>
 
       {/* Features Section */}
-      <section className="container mx-auto px-4 py-16 bg-white">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-          Why TripRT is Different
-        </h2>
-
-        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          <div className="card text-center">
-            <div className="flex justify-center mb-4">
-              <Globe className="w-16 h-16 text-primary-600" />
-            </div>
-            <h3 className="text-xl font-bold mb-3">Multi-Language Search</h3>
-            <p className="text-gray-600">
-              We search travel sites in 15 languages, finding deals others miss. Japanese and Korean sites often have exclusive prices.
-            </p>
-          </div>
-
-          <div className="card text-center">
-            <div className="flex justify-center mb-4">
-              <TrendingDown className="w-16 h-16 text-primary-600" />
-            </div>
-            <h3 className="text-xl font-bold mb-3">30% Cheaper Prices</h3>
-            <p className="text-gray-600">
-              Japanese & Korean sites often have prices 30% lower than Skyscanner. We find them automatically.
-            </p>
-          </div>
-
-          <div className="card text-center">
-            <div className="flex justify-center mb-4">
-              <Brain className="w-16 h-16 text-primary-600" />
-            </div>
-            <h3 className="text-xl font-bold mb-3">AI-Powered Insights</h3>
-            <p className="text-gray-600">
-              Get smart recommendations on best time to book, flexible dates, and alternative airports.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* How It Works */}
-      <section className="container mx-auto px-4 py-16 bg-gray-50">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-          How It Works
-        </h2>
-
-        <div className="max-w-4xl mx-auto space-y-8">
-          <div className="flex items-start gap-6">
-            <div className="flex-shrink-0 w-12 h-12 bg-primary-600 text-white rounded-full flex items-center justify-center font-bold text-xl">
-              1
-            </div>
-            <div>
-              <h3 className="text-xl font-bold mb-2">Enter Your Trip Details</h3>
+      <section className="py-16 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h3 className="text-3xl font-bold text-center mb-12">Why TripRT?</h3>
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="bg-white p-6 rounded-lg shadow">
+              <div className="text-4xl mb-4">🌍</div>
+              <h4 className="text-xl font-bold mb-2">Multi-Language Search</h4>
               <p className="text-gray-600">
-                Tell us where you want to go, when, and how many travelers. Our AI understands flexible dates and alternative airports.
+                Search Japanese, Korean, Chinese travel sites for hidden deals
               </p>
             </div>
-          </div>
-
-          <div className="flex items-start gap-6">
-            <div className="flex-shrink-0 w-12 h-12 bg-primary-600 text-white rounded-full flex items-center justify-center font-bold text-xl">
-              2
-            </div>
-            <div>
-              <h3 className="text-xl font-bold mb-2">We Search in 15 Languages</h3>
+            <div className="bg-white p-6 rounded-lg shadow">
+              <div className="text-4xl mb-4">🤖</div>
+              <h4 className="text-xl font-bold mb-2">AI-Powered</h4>
               <p className="text-gray-600">
-                Our AI searches Japanese sites (Rakuten Travel, Jalan), Korean sites (Naver, Interpark), Chinese sites (Ctrip, Qunar), and global platforms simultaneously.
+                Perplexity AI finds the absolute cheapest prices
               </p>
             </div>
-          </div>
-
-          <div className="flex items-start gap-6">
-            <div className="flex-shrink-0 w-12 h-12 bg-primary-600 text-white rounded-full flex items-center justify-center font-bold text-xl">
-              3
-            </div>
-            <div>
-              <h3 className="text-xl font-bold mb-2">Get the Best Deals</h3>
+            <div className="bg-white p-6 rounded-lg shadow">
+              <div className="text-4xl mb-4">🔔</div>
+              <h4 className="text-xl font-bold mb-2">Price Alerts</h4>
               <p className="text-gray-600">
-                We show you the cheapest options with transparent pricing. No hidden fees, no tricks. Just honest savings.
+                Get notified via SMS/Email when prices drop
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="container mx-auto px-4 py-16 text-center">
-        <h2 className="text-3xl md:text-4xl font-bold mb-6">
-          Stop Overpaying for Travel
-        </h2>
-        <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-          Join thousands of travelers saving money with TripRT. Start your search now.
-        </p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Link href="/flights" className="btn-primary inline-flex items-center gap-2">
-            <Plane className="w-5 h-5" />
-            Search Flights
-          </Link>
-          <Link href="/hotels" className="btn-secondary inline-flex items-center gap-2">
-            <Hotel className="w-5 h-5" />
-            Search Hotels
-          </Link>
+      {/* Ad Banner Section */}
+      <section className="py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <AdBanner slot="home-bottom" />
         </div>
       </section>
-    </div>
-  )
+
+      {/* Footer */}
+      <footer className="bg-gray-900 text-white py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-4 gap-8">
+            <div>
+              <h5 className="font-bold text-lg mb-4">TripRT</h5>
+              <p className="text-gray-400">
+                Find the cheapest flights and hotels with AI
+              </p>
+            </div>
+            <div>
+              <h5 className="font-bold mb-4">Product</h5>
+              <ul className="space-y-2 text-gray-400">
+                <li><a href="/flights">Flights</a></li>
+                <li><a href="/hotels">Hotels</a></li>
+                <li><a href="/alerts">Price Alerts</a></li>
+              </ul>
+            </div>
+            <div>
+              <h5 className="font-bold mb-4">Company</h5>
+              <ul className="space-y-2 text-gray-400">
+                <li><a href="/about">About</a></li>
+                <li><a href="/blog">Blog</a></li>
+                <li><a href="/contact">Contact</a></li>
+              </ul>
+            </div>
+            <div>
+              <h5 className="font-bold mb-4">Legal</h5>
+              <ul className="space-y-2 text-gray-400">
+                <li><a href="/privacy">Privacy</a></li>
+                <li><a href="/terms">Terms</a></li>
+              </ul>
+            </div>
+          </div>
+          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+            <p>&copy; 2025 TripRT. All rights reserved.</p>
+          </div>
+        </div>
+      </footer>
+    </main>
+  );
 }

@@ -23,16 +23,6 @@ module.exports = {
       },
       borderColor: {
         DEFAULT: '#e5e7eb',
-        border: '#e5e7eb',
-      },
-      ringColor: {
-        DEFAULT: '#3b82f6',
-      },
-      backgroundColor: {
-        DEFAULT: '#ffffff',
-      },
-      textColor: {
-        DEFAULT: '#0f172a',
       },
     },
   },
